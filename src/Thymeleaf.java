@@ -1,51 +1,65 @@
 import javax.swing.*;
-import java.awt.*;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.lang.reflect.Field;
 
 public class Thymeleaf {
+
+    private static Thymeleaf instance;
+
+    private MainFrame mainFrame;
+
+    // 생성자 private
+    private Thymeleaf() {}
+
+    // 싱글턴 접근 메서드
+    public static Thymeleaf getInstance() {
+        if (instance == null) {
+            instance = new Thymeleaf();
+        }
+        return instance;
+    }
+
+    // 메인프레임 세터
+    public void setMainFrame(MainFrame frame) {
+        this.mainFrame = frame;
+    }
+
     public enum ViewName {
         FORM,
         HOME,
         LIST
     }
 
-
-    public static void start() {
-
-
-    }
-
-    public static void showView(JPanel view, Model model) {
-
-    }
-    public void showView(ViewName viewName) {
-        JPanel view;
+    public void showView(ViewName viewName, Map<String, Object> box) {
+        JPanel view = null;
 
         switch (viewName) {
             case FORM:
-                view = new FormPanel(Model.box);
+                view = new FormPanel(box);
                 break;
-            case HOME:
-                view = new HomePanel();
-                break;
-            case LIST:
-                view = new ListPanel();
-                break;
+            // case HOME:
+            //     view = new HomePanel();
+            //     break;
             default:
-                view = new JLabel("❗ 알 수 없는 화면");
+                System.out.println("Unknown View : " + viewName);
+                // view = new JLabel("❗ 알 수 없는 화면");
         }
 
-        mainFrame.setView(view);
+        if (mainFrame != null) {
+            mainFrame.setView(view);
+        } else {
+            System.out.println("mainFrame이 설정되지 않았습니다!");
+        }
     }
 
     public static class Model {
         public static Map<String, Object> box = new HashMap<>();
     }
 
+    // converterMap, convert(), bind()는 그대로 유지
     public static final Map<Class<?>, Function<String, Object>> converterMap = new HashMap<>();
 
     static {
@@ -88,28 +102,5 @@ public class Thymeleaf {
         } catch (Exception e) {
             throw new RuntimeException("모델 바인딩 실패", e);
         }
-    }
-
-    // 뷰 라우팅, 뷰 생성
-
-
-    public void showView(MainFrame frame, String viewName) {
-        JPanel view;
-
-        switch (viewName) {
-            case ViewNames.FORM:
-                view = new FormPanel();  // 각 화면은 JPanel을 상속받은 클래스
-                break;
-            case ViewNames.HOME:
-                view = new HomePanel();
-                break;
-            case ViewNames.LIST:
-                view = new ListPanel();
-                break;
-            default:
-                view = new JLabel("알 수 없는 화면: " + viewName);
-        }
-
-        mainFrame.setView(view);
     }
 }

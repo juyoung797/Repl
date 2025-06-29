@@ -1,18 +1,16 @@
 import javax.swing.*;
-
-import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 
 public class MainFrame extends JFrame {
 
     private JPanel currentView;
 
-    public MainFrame(Map) {
+    public MainFrame() {
         setTitle("My MVC App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
     }
 
     public void setView(JPanel newView) {
