@@ -1,9 +1,16 @@
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Task {
+    private AtomicInteger id = new AtomicInteger();
     private boolean isDone = false;
     private String description;
     private Date dueDate;
+
+    Task(String description) {
+        this.description = description;
+        dueDate = new Date();
+    }
 
     // getters
     public boolean getIsDone() {
